@@ -26,7 +26,7 @@ qrepeat.cbThrewWarning = 'qrepeat: callback threw';
 qrepeat = toStruct(qrepeat);
 
 // node-v0.10 nextTick did not accept function args yet
-var nodeVersion = process.version.slice(1, process.version.indexOf('.'));
+var nodeVersion = parseFloat(process.versions.node);
 var nextTick = nodeVersion >= 4 ? process.nextTick : setImmediate;
 
 // TODO: move into the class, add mechanism for turning off warnings 
