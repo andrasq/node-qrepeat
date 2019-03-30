@@ -17,8 +17,7 @@ var untilSingleton = new QRepeat();
 var qrepeat = module.exports = {};
 qrepeat.QRepeat = QRepeat;
 qrepeat.repeatUntil = function(fn, cb) { untilSingleton._repeat(fn, cb) };
-// FIXME: repeatUntilA ??
-// qrepeat.repeatUntilA = function(fn, arg, testStop, cb) { new QRepeat().repeatUntil(fn, arg, testStop, cb) };
+// qrepeat.repeatUntilA = function(fn, arg, testStop, cb) { new QRepeatArg(arg, testStop)._repeat(fn, cb) };
 qrepeat.doUntil = qrepeat.repeatUntil;
 qrepeat.repeatWhile = function(ck, fn, cb) { new QRepeatWhile(ck)._repeat(fn, cb) };
 qrepeat.cbAlreadyCalledWarning = 'qrepeat: callback already called';
@@ -43,7 +42,7 @@ function makeError( code, message ) {
 }
 
 /*
- * the repeater class constructor
+ * the repeater parent class, runs repeatUntil.
  */
 function QRepeat( ) {
 }
@@ -76,11 +75,8 @@ QRepeat.prototype.__repeat = function _repeat( loop, callback ) {
     }
 }
 
+// shared repeater methods that implement repeatUntil
 QRepeat.prototype._repeat = cloneFunc(QRepeat.prototype.__repeat);
-QRepeat.prototype.repeatUntil = function repeatUntil( loopFunc, callback ) {
-    // works with all defaults
-    this._repeatRU(loopFunc, callback);
-};
 QRepeat.prototype._tryCall1 = function _tryCall1(func, cb) {
     try { func(cb) } catch (err) { cb(makeError('THREW', err || 'threw falsy error')) } };
 QRepeat.prototype._tryCallback1 = function _tryCallback1(cb, err) {
@@ -92,34 +88,10 @@ QRepeat.prototype._testStop = function _testRepeatUntilDone(err, done) {
 QRepeat.prototype._tryCall = QRepeat.prototype._tryCall1;
 QRepeat.prototype._tryCallback = QRepeat.prototype._tryCallback1;
 
-/**
-QRepeat.prototype._repeatRW = cloneFunc(QRepeat.prototype.__repeat);
-QRepeat.prototype.repeatWhile = function repeatWhile( testFunc, loopFunc, callback ) {
-    // this function must be called on a new object every time
-    //var state = { test: testFunc, loop: loopFunc, cb: callback };
-    this._preTest = testFunc;
-    this._tryCall = this._tryCallWhile;
-    this._testStop = this._testStopMarker;
-    this._repeatRW(loopFunc, callback);
-}
-QRepeat.prototype._postTest = function(){};
-QRepeat.prototype._preTest = function(){};
-QRepeat.prototype._tryCallWhile = function _tryCallWhile( func, cb ) {
-    this._preTest() ? this._tryCall1(func, cb) : cb(null, 'qrepeat-done-marker') }
-QRepeat.prototype._testStopMarker = function(err, done) { return err || done === 'qrepeat-done-marker' }
 
-QRepeat.prototype._tryCall1 = function _tryCall1(func, cb) {
-    try { func(cb) } catch (err) { cb(makeError('THREW', err || 'threw falsy error')) } };
-QRepeat.prototype._tryCallback1 = function _tryCallback1(cb, err) {
-    try { cb(err) } catch (err2) { warn(qrepeat.cbThrewWarning, err2, err2.stack); throw err2 } }
-QRepeat.prototype._cleanCallback = function _cleanCallback( err, state ) {
-    err === state ? state.cb() : state.cb(err) }
-QRepeat.prototype._testRepeatUntilDone = function _testRepeatUntilDone(err, done) {
-    return err || done; }
-QRepeat.prototype._testStop = QRepeat.prototype._testRepeatUntilDone;
-**/
-
-
+/*
+ * override repeater methods to implement repeatWhile
+ */
 function QRepeatWhile( testFunc ) {
     this._preTest = testFunc;
 }
@@ -137,6 +109,7 @@ QRepeatWhile.prototype.repeatWhile = function( testFunc, loopFunc, callback ) {
 }
 
 QRepeat.prototype = toStruct(QRepeat.prototype);
+QRepeatWhile.prototype = toStruct(QRepeatWhile.prototype);
 function toStruct(obj) { return eval("toStruct.prototype = obj") }
 function cloneFunc(fn) { return eval("true && " + fn.toString()) }
 
