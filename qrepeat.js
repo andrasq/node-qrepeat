@@ -18,7 +18,6 @@ var qrepeat = module.exports = {};
 qrepeat.QRepeat = QRepeat;
 qrepeat.repeatUntil = function(fn, cb) { untilSingleton._repeat(fn, cb) };
 // qrepeat.repeatUntilA = function(fn, arg, testStop, cb) { new QRepeatArg(arg, testStop)._repeat(fn, cb) };
-qrepeat.doUntil = qrepeat.repeatUntil;
 qrepeat.repeatWhile = function(ck, fn, cb) { new QRepeatWhile(ck)._repeat(fn, cb) };
 qrepeat.cbAlreadyCalledWarning = 'qrepeat: callback already called';
 qrepeat.cbThrewWarning = 'qrepeat: callback threw';
