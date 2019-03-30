@@ -15,7 +15,7 @@ var util = require('util');
 var untilSingleton = new QRepeat();
 var whileSingleton = new QRepeat();
 
-var qrepeat = module.exports;
+var qrepeat = module.exports = {};
 qrepeat.QRepeat = QRepeat;
 qrepeat.repeatUntil = function(fn, cb) { untilSingleton.repeatUntil(fn, cb) };
 qrepeat.repeatUntilA = function(fn, arg, testStop, cb) { new QRepeat().repeatUntil(fn, arg, testStop, cb) };
@@ -23,7 +23,7 @@ qrepeat.doUntil = qrepeat.repeatUntil;
 qrepeat.repeatWhile = function(ck, fn, cb) { whileSingleton.repeatWhile(ck, fn, cb) };
 qrepeat.cbAlreadyCalledWarning = 'qrepeat: callback already called';
 qrepeat.cbThrewWarning = 'qrepeat: callback threw';
-qrepeat = toStruct(qrepeat);
+toStruct(qrepeat);
 
 // node-v0.10 nextTick did not accept function args yet
 var nodeVersion = parseFloat(process.versions.node);
@@ -131,5 +131,5 @@ QRepeat.prototype._tryCallback = QRepeat.prototype._tryCallback1;
 
 QRepeat.prototype = toStruct(QRepeat.prototype);
 function toStruct(obj) { return eval("toStruct.prototype = obj") }
-function cloneFunc(fn) { var x; eval("x = " + fn.toString()); return x }
+function cloneFunc(fn) { return eval("true && " + fn.toString()) }
 
