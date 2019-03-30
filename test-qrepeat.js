@@ -47,6 +47,29 @@ module.exports = {
                 })
             },
 
+            'should catch and return errors': function(t) {
+                qrepeat.repeatUntil(function() { throw false }, function(err) {
+                    t.ok(err);
+                    t.contains(err.message, 'threw falsy');
+                    t.done();
+                })
+            },
+
+            'should warn about and return callback errors': function(t) {
+                var spy = t.stub(process.stderr, 'write');
+                var returnCount = 0;
+                qrepeat.repeatUntil(function(cb) { cb(null, true) }, function(err) {
+                    if (!returnCount++) throw 'mock callback error';
+                    if (returnCount == 2) {
+                        spy.restore();
+                        t.ok(spy.called);
+                        t.contains(spy.args[0][0], 'qrepeat: callback threw');
+                        t.contains(spy.args[1][0], 'qrepeat: callback already called');
+                        t.done();
+                    }
+                });
+            },
+
             'should print warning and return error on duplicate callback': function(t) {
                 var n = 0, rets = [];
                 var stub = t.stub(process.stderr, 'write');

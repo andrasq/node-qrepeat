@@ -26,7 +26,7 @@ toStruct(qrepeat);
 
 // node-v0.10 nextTick did not accept function args yet
 var nodeVersion = parseFloat(process.versions.node);
-var nextTick = nodeVersion >= 4 ? process.nextTick : setImmediate;
+var nextTick = eval("nodeVersion >= 4 ? process.nextTick : setImmediate");
 
 // TODO: move into the class, add mechanism for turning off warnings 
 // print a warning to stderr
@@ -62,7 +62,7 @@ QRepeat.prototype.__repeat = function _repeat( loop, callback ) {
         //   - a duplicate callback could be used instead of a missing callback
         if (++returnCount > callCount) {
             // warn in addition to invoking callback with an error
-            var msg = qrepeat.cbAlreadyCalledWarning + (err ? '; new error: ' + err.stack : '');
+            var msg = qrepeat.cbAlreadyCalledWarning + (err ? ', new error: ' + err.stack : '');
             warn(msg); self._tryCallback(callback, makeError('DUPCB', msg));
         }
         else if (self._testStop(err, stop)) { return self._tryCallback(callback, err) }
@@ -75,6 +75,7 @@ QRepeat.prototype.__repeat = function _repeat( loop, callback ) {
     }
 }
 QRepeat.prototype.__tryCall = function __tryCall(func, cb) {
+    // NOTE: the callback also runs in our try/catch, so if it throws it invokes itself again
     try { func(cb) } catch (err) { cb(makeError('THREW', err || 'threw falsy ' + err)) }
 };
 QRepeat.prototype._tryCallback = function _tryCallback(cb, err) {
@@ -84,7 +85,8 @@ QRepeat.prototype._tryCallback = function _tryCallback(cb, err) {
 /*
  * methods that make _repeat implement repeatUntil
  */
-QRepeat.prototype._repeat = cloneFunc(QRepeat.prototype.__repeat);
+//QRepeat.prototype._repeat = cloneFunc(QRepeat.prototype.__repeat);
+QRepeat.prototype._repeat = QRepeat.prototype.__repeat;
 QRepeat.prototype._tryCall = QRepeat.prototype.__tryCall;
 QRepeat.prototype._testStop = function _testRepeatUntilDone(err, done) {
     return err || done;
