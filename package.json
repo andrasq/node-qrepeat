@@ -1,0 +1,19 @@
+{
+  "name": "qrepeat",
+  "version": "0.8.0",
+  "description": "fast async doWhile and doUntil iteration",
+  "main": "qrepeat.js",
+  "license": "Apache-2.0",
+  "files": ["qrepeat.js", "README.md"],
+
+  "keywords": [ "repeat", "async", "doUntil", "doWhile", "repeatUntil" ],
+  "author": "andrasq",
+  "repository": { "type": "git", "url": "git://github.com/andrasq/node-qrepeat" },
+  "readme": "see README.md in the repo",
+
+  "scripts": {
+    "test": "qnit --version || npm install qnit ; qnit test-*",
+    "coverage": "nyc -r lcov -r text npm run test",
+    "clean": "rm -rf .nyc_output coverage npm-debug.log"
+  }
+}
