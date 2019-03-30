@@ -13,14 +13,13 @@
 var util = require('util');
 
 var untilSingleton = new QRepeat();
-var whileSingleton = new QRepeat();
 
 var qrepeat = module.exports = {};
 qrepeat.QRepeat = QRepeat;
 qrepeat.repeatUntil = function(fn, cb) { untilSingleton.repeatUntil(fn, cb) };
 qrepeat.repeatUntilA = function(fn, arg, testStop, cb) { new QRepeat().repeatUntil(fn, arg, testStop, cb) };
 qrepeat.doUntil = qrepeat.repeatUntil;
-qrepeat.repeatWhile = function(ck, fn, cb) { whileSingleton.repeatWhile(ck, fn, cb) };
+qrepeat.repeatWhile = function(ck, fn, cb) { new QRepeat().repeatWhile(ck, fn, cb) };
 qrepeat.cbAlreadyCalledWarning = 'qrepeat: callback already called';
 qrepeat.cbThrewWarning = 'qrepeat: callback threw';
 toStruct(qrepeat);
