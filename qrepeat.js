@@ -78,13 +78,17 @@ QRepeat.prototype.__repeat = function _repeat( loop, callback ) {
 // shared repeater methods that implement repeatUntil
 QRepeat.prototype._repeat = cloneFunc(QRepeat.prototype.__repeat);
 QRepeat.prototype._tryCall1 = function _tryCall1(func, cb) {
-    try { func(cb) } catch (err) { cb(makeError('THREW', err || 'threw falsy error')) } };
+    try { func(cb) } catch (err) { cb(makeError('THREW', err || 'threw falsy ' + err)) }
+};
 QRepeat.prototype._tryCallback1 = function _tryCallback1(cb, err) {
-    try { cb(err) } catch (err2) { warn(qrepeat.cbThrewWarning, err2, err2.stack); throw err2 } }
+    try { cb(err) } catch (err2) { warn(qrepeat.cbThrewWarning, err2, err2.stack); throw err2 }
+};
 QRepeat.prototype._cleanCallback = function _cleanCallback( err, state ) {
-    err === state ? state.cb() : state.cb(err) }
+    err === state ? state.cb() : state.cb(err);
+};
 QRepeat.prototype._testStop = function _testRepeatUntilDone(err, done) {
-    return err || done; }
+    return err || done;
+};
 QRepeat.prototype._tryCall = QRepeat.prototype._tryCall1;
 QRepeat.prototype._tryCallback = QRepeat.prototype._tryCallback1;
 
@@ -99,14 +103,16 @@ util.inherits(QRepeatWhile, QRepeat);
 QRepeatWhile.prototype._preTest = function(){};
 QRepeatWhile.prototype._repeat = cloneFunc(QRepeat.prototype.__repeat);
 QRepeatWhile.prototype._tryCall = function _tryCallWhile( func, cb ) {
-    this._preTest() ? this._tryCall1(func, cb) : cb(null, 'qrepeat-done-marker') };
+    this._preTest() ? this._tryCall1(func, cb) : cb(null, 'qrepeat-done-marker');
+};
 QRepeatWhile.prototype._testStop = function(err, done) {
-    return err || done === 'qrepeat-done-marker' }
+    return err || done === 'qrepeat-done-marker';
+};
 QRepeatWhile.prototype.repeatWhile = function( testFunc, loopFunc, callback ) {
     // this function must be called on a new object every time
     this._preTest = testFunc;
     this._repeat(loopFunc, callback);
-}
+};
 
 QRepeat.prototype = toStruct(QRepeat.prototype);
 QRepeatWhile.prototype = toStruct(QRepeatWhile.prototype);
