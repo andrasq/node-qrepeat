@@ -113,4 +113,3 @@ QRepeat.prototype = toStruct(QRepeat.prototype);
 QRepeatWhile.prototype = toStruct(QRepeatWhile.prototype);
 function toStruct(obj) { return eval("toStruct.prototype = obj") }
 function cloneFunc(fn) { return eval("true && " + fn.toString()) }
-
