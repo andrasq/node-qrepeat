@@ -50,6 +50,7 @@ module.exports = {
             'should catch and return errors': function(t) {
                 qrepeat.repeatUntil(function() { throw false }, function(err) {
                     t.ok(err);
+                    t.equal(err.qrcode, 'THREW');
                     t.contains(err.message, 'threw falsy');
                     t.done();
                 })
@@ -59,11 +60,17 @@ module.exports = {
                 var spy = t.stub(process.stderr, 'write');
                 var returnCount = 0;
                 qrepeat.repeatUntil(function(cb) { cb(null, true) }, function(err) {
-                    if (!returnCount++) throw 'mock callback error';
+                    if (!returnCount++) {
+                        t.ok(!err);
+                        throw new Error('mock callback error');
+                    }
                     if (returnCount == 2) {
                         spy.restore();
-                        t.ok(spy.called);
+                        t.ok(err);
+                        t.equal(err.qrcode, 'DUPCB');
                         t.contains(spy.args[0][0], 'qrepeat: callback threw');
+                        t.ok(spy.called);
+                        t.contains(spy.args[0][0], 'mock callback error');
                         t.contains(spy.args[1][0], 'qrepeat: callback already called');
                         t.done();
                     }
