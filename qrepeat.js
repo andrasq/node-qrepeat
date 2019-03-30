@@ -77,20 +77,18 @@ QRepeat.prototype.__repeat = function _repeat( loop, callback ) {
 QRepeat.prototype.__tryCall = function __tryCall(func, cb) {
     try { func(cb) } catch (err) { cb(makeError('THREW', err || 'threw falsy ' + err)) }
 };
-
-// shared repeater methods that implement repeatUntil
-QRepeat.prototype._repeat = cloneFunc(QRepeat.prototype.__repeat);
-QRepeat.prototype._tryCallback1 = function _tryCallback1(cb, err) {
+QRepeat.prototype._tryCallback = function _tryCallback(cb, err) {
     try { cb(err) } catch (err2) { warn(qrepeat.cbThrewWarning, err2, err2.stack); throw err2 }
 };
-QRepeat.prototype._cleanCallback = function _cleanCallback( err, state ) {
-    err === state ? state.cb() : state.cb(err);
-};
+
+/*
+ * shared repeater methods that implement repeatUntil
+ */
+QRepeat.prototype._repeat = cloneFunc(QRepeat.prototype.__repeat);
 QRepeat.prototype._testStop = function _testRepeatUntilDone(err, done) {
     return err || done;
 };
 QRepeat.prototype._tryCall = QRepeat.prototype.__tryCall;
-QRepeat.prototype._tryCallback = QRepeat.prototype._tryCallback1;
 
 
 /*
