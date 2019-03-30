@@ -35,8 +35,8 @@ function warn( ) {
     console.warn("%s -- qrepeat: %s", new Date().toISOString(), util.format.apply(util, [].slice.call(arguments)));
 }
 
-function makeError(code, message) {
-    var err = (typeof message === 'string') ? (err = new Error(message), err.code = code, err) : err;
+function makeError( code, message ) {
+    var err = (typeof message === 'object') ? err : (err = new Error(message), err.code = code, err);
     err.qrcode = code;
     Error.captureStackTrace(err, makeError);
     return err;
