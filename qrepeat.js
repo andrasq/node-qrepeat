@@ -60,16 +60,15 @@ QRepeat.prototype._repeat = function _repeat( loop, arg, callback ) {
         //   - a duplicate callback could be used instead of a missing callback
         if (++returnCount > callCount) {
             // warn in addition to invoking callback with an error
-            var msg; warn((msg = qrepeat.cbAlreadyCalledWarning + (err ? '; new error: ' + err.stack : '')));
-            if (err) err.qrcode = 'DUPCB';
-            self._tryCallback(callback, err || makeError('DUPCB', msg));
+            var msg = qrepeat.cbAlreadyCalledWarning + (err ? '; new error: ' + err.stack : '');
+            warn(msg); self._tryCallback(callback, makeError('DUPCB', msg));
         }
         else if (self._testStop(err, stop, arg)) { return self._tryCallback(callback, err) }
         else if (depth++ < 20) { callCount++; return self._tryCall(loop, _return) }
         else {
-            // every 20 calls break up the call stack, every 1000 yield to the event loop
+            // every 20 calls break up the call stack, every 100 yield to the event loop
             depth = 0; callCount++;var fn = function(){ self._tryCall(loop, _return) }
-            if (++tickBreaks > 50) { tickBreaks = 0; setImmediate(fn) } else { nextTick(fn) }
+            if (++tickBreaks < 100) { nextTick(fn) } else { tickBreaks = 0; setImmediate(fn) }
         }
     }
 }
