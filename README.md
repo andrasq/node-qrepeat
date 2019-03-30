@@ -52,8 +52,16 @@ Repeatedly call `fn(cb)` until it returns a truthy value to its callback.  Stops
 Note: because `callback` runs in the same try/catch as `fn`, errors thrown by `callback` are
 also caught and routed to the callback.
 
+Equivalent to the pseudocode
+
+    while (!fn()) ;
+
 ### repeatWhile( testFn, fn, callback(err) )
 
 While `testFn()` returns truthy, repeatedly call `fn(cb)`.  Stops if fn throws.
 Note: because `callback` runs in the same try/catch as `fn`, errors thrown by `callback` are
 also caught and routed to the callback.
+
+Equivalent to the pseudocode
+
+    while (testFn()) fn();

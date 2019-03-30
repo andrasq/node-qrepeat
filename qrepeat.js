@@ -47,7 +47,8 @@ function QRepeat( ) {
 }
 
 // repeat loop() until it returns error or truthy
-// Arguments may be passed by redefining _tryCall, _testStop and _tryCallback.
+// Arguments may be passed by redefining _tryCall and _testStop
+// TODO: deprecate _tryCallback, its only function to show the "callback threw" before "duplicate callback"
 QRepeat.prototype.__repeat = function _repeat( loop, callback ) {
     var self = this;
     var depth = 0, tickBreaks = 0, callCount = 0, returnCount = 0;
