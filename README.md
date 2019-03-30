@@ -15,6 +15,7 @@ Fast iteration of async functions.
                 next(null, count >= 3);
             },
             function(err) {
+                console.log('Done.');
             }
         );
     }
@@ -22,6 +23,7 @@ Fast iteration of async functions.
     // => 1
     //    2
     //    3
+    //    Done.
 
 
 Testing
@@ -52,6 +54,6 @@ also caught and routed to the callback.
 
 ### repeatWhile( testFn, fn, callback(err) )
 
-While `testFn()` return truthy, repeatedly call `fn(cb)`.  Stops if fn throws.
+While `testFn()` returns truthy, repeatedly call `fn(cb)`.  Stops if fn throws.
 Note: because `callback` runs in the same try/catch as `fn`, errors thrown by `callback` are
 also caught and routed to the callback.
