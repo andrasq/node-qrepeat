@@ -93,7 +93,8 @@ var bench = {
     //'async.whilst': function(cb) { n = 0; async.whilst(testNFunc, loopFunc, function(){ nextTick(cb) }) },
     //'async.whilst_b': function(cb) { n = 0; async.whilst(testNFunc2, loopFunc2, function(){ nextTick(cb) }) },
 // /**
-// FIXME: crashes the test
+    // note: async@2,@2 work, async@3 causes node to exit immediately
+    // note: async@2 pulls in lodash as a dependency, size v1 184K -> v2 5800K -> v3 996K
     'async.whilst': function(cb) { n = 0; async.whilst(testNFunc, loopFunc, _callbackCaller(cb)) },
     'async.whilst_b': function(cb) { n = 0; async.whilst(testNFunc2, loopFunc2, _callbackCaller(cb)) },
     'async.doUntil': function(cb) { n = 0; async.doUntil(loopFunc, testNNFunc, _callbackCaller(cb)) },
