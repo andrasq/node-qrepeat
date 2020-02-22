@@ -69,8 +69,8 @@ QRepeat.prototype.__repeat = function _repeat( loop, callback ) {
         else if (depth++ < 20) { callCount++; return self._tryCall(loop, _return) }
         else {
             // every 20 calls break up the call stack, every 100 yield to the event loop
-            depth = 0; callCount++;var fn = function(){ self._tryCall(loop, _return) }
-            if (++tickBreaks < 100) { nextTick(fn) } else { tickBreaks = 0; setImmediate(fn) }
+            depth = 0; callCount++; var fn = function(){ self._tryCall(loop, _return) };
+            if (++tickBreaks < 5) { nextTick(fn) } else { tickBreaks = 0; setImmediate(fn) }
         }
     }
 }

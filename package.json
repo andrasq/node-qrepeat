@@ -1,6 +1,6 @@
 {
   "name": "qrepeat",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "fast async doWhile and doUntil iteration",
   "main": "qrepeat.js",
   "license": "Apache-2.0",
