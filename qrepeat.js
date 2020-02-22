@@ -34,9 +34,8 @@ function warn( ) {
 }
 
 function makeError( code, message ) {
-    var err = (typeof message === 'object') ? message : (err = new Error(message), err.code = code, err);
+    var err = (typeof message === 'object') ? message : (err = new Error(message), err.code = code, Error.captureStackTrace(err, makeError), err);
     err.qrcode = code;
-    Error.captureStackTrace(err, makeError);
     return err;
 }
 
