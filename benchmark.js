@@ -93,8 +93,9 @@ var bench = {
     //'async.whilst': function(cb) { n = 0; async.whilst(testNFunc, loopFunc, function(){ nextTick(cb) }) },
     //'async.whilst_b': function(cb) { n = 0; async.whilst(testNFunc2, loopFunc2, function(){ nextTick(cb) }) },
 // /**
-    // note: async@2,@2 work, async@3 causes node to exit immediately
+    // note: async@2,@2 work, async@3 causes node to die immediately
     // note: async@2 pulls in lodash as a dependency, size v1 184K -> v2 5800K -> v3 996K
+    // note: causes node to die on nloops = 800
     'async.whilst': function(cb) { n = 0; async.whilst(testNFunc, loopFunc, _callbackCaller(cb)) },
     'async.whilst_b': function(cb) { n = 0; async.whilst(testNFunc2, loopFunc2, _callbackCaller(cb)) },
     'async.doUntil': function(cb) { n = 0; async.doUntil(loopFunc, testNNFunc, _callbackCaller(cb)) },
@@ -114,7 +115,7 @@ var tests = Object.keys(bench);
 //for (var i=0, k; (k=tests[i], i<tests.length); i++) bench[k + ' 2'] = bench[k];
 //for (var i=0, k; (k=tests[i], i<tests.length); i++) bench[k + ' 3'] = bench[k];
 
-qtimeit.bench.timeGoal = .22;
+qtimeit.bench.timeGoal = .05;
 //qtimeit.bench.forkTests = true;
 qtimeit.bench.visualize = true;
 //qtimeit.bench.showRunDetails = false;
@@ -138,6 +139,7 @@ qrepeat.repeatUntil(function(done) {
             qtimeit.bench(bench, function(err) {
                 if (err) console.log("AR: bench error:", err.stack);
                 console.timeEnd("test");
+                qtimeit.bench.timeGoal = .22;
                 done();
             })
         })
