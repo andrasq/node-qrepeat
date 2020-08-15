@@ -65,3 +65,10 @@ also caught and routed to the callback.
 Equivalent to the pseudocode
 
     while (testFn()) fn();
+
+
+Change Log
+----------
+
+* 0.8.1 - yield to event loop more frequently
+* 0.8.0 - first published version
