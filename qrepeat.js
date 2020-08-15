@@ -25,7 +25,7 @@ toStruct(qrepeat);
 
 // node-v0.10 nextTick did not accept function args yet
 var nodeVersion = parseFloat(process.versions.node);
-var setImmediate = global.setImmediate || function(fn, a, b) { setTimeout(function() { fn(a, b) }) };
+var setImmediate = eval("global.setImmediate || function(fn, a, b) { setTimeout(function() { fn(a, b) }) }");
 var nextTick = eval("nodeVersion >= 4 ? process.nextTick : setImmediate");
 
 // TODO: move into the class, add mechanism for turning off warnings 

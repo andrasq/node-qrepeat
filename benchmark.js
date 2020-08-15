@@ -105,6 +105,7 @@ var bench = {
     'qrepeat.repeatUntil_b': function(cb) { n = 0; qrepeat.repeatUntil(loopFunc2, cb) },
     'qrepeat.repeatWhile': function(cb) { n = 0; qrepeat.repeatWhile(testNFunc, loopFunc, cb) },
     'qrepeat.repeatWhile_b': function(cb) { n = 0; qrepeat.repeatWhile(testNFunc2, loopFunc2, cb) },
+
     'aflow.repeatUntil': function(cb) { n = 0; aflow.repeatUntil(loopFunc, cb) },
     'aflow.repeatUntil_b': function(cb) { n = 0; aflow.repeatUntil(loopFunc2, cb) },
     'aflow.repeatWhile': function(cb) { n = 0; aflow.repeatWhile(testNFunc, loopFunc, cb) },
