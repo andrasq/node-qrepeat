@@ -2,7 +2,7 @@
  * very fast repeatUntil
  * Adapted from microrest, which adapted it from aflow, originally called repeatUntil.
  *
- * Copyright (C) 2019 Andras Radics
+ * Copyright (C) 2019-2020 Andras Radics
  * Licensed under the Apache License, Version 2.0
  *
  * 2019-01-25 - AR.
@@ -54,13 +54,12 @@ QRepeat.prototype.__repeat = function _repeat( loop, callback ) {
 
     callCount++; self._tryCall(loop, _return);
 
+    // TODO: maybe _tryCallback should suppress duplicate callbacks to the caller
+    // NOTE: counting callbacks is not foolproof:
+    //   - a duplicate callback before current call returns will be used instead
+    //   - a duplicate callback could be used instead of a missing callback
     function _return(err, stop) {
-        // TODO: maybe _tryCallback should suppress duplicate callbacks to the caller
-        // NOTE: counting callbacks is not fool proof:
-        //   - a duplicate callback before current call returns will be used instead
-        //   - a duplicate callback could be used instead of a missing callback
         if (++returnCount > callCount) {
-            // warn in addition to invoking callback with an error
             var msg = qrepeat.cbAlreadyCalledWarning + (err ? ', new error: ' + err.stack : '');
             warn(msg); self._tryCallback(callback, makeError('DUPCB', msg));
         }
