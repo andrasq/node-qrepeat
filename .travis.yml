@@ -2,6 +2,7 @@ language: node_js
 before_install:
   - npm install qnit
 node_js:
+  - 0.8
   - 0.10
   - 6
   - 8

@@ -7,6 +7,9 @@
 
 var qrepeat = require('./');
 
+// node-v0.8 needs a setImmediate that accepts arguments
+var setImmediate = global.setImmediate || function(fn, a, b) { setTimeout(function() { fn(a, b) }) };
+
 module.exports = {
     'should export expected functions': function(t) {
         t.equal(typeof qrepeat.repeatUntil, 'function');
